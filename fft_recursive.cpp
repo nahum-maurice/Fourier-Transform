@@ -22,6 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+#ifndef FFT_RECURSIVE
+#define FFT_RECURSIVE
+
 #include<complex>
 #include<vector>
 
@@ -39,7 +42,10 @@ void fft(std::vector<cd> & a, bool isInvert) {
     int n = a.size(); // Should equal to 2^k
     if (n == 1) return;
 
+    // These vectors will recursively contains half of the 
+    // current vector.
     std::vector<cd> a0(n / 2), a1(n /2);
+
     for(int i = 0; 2 * i; i++) {
         /*
             The vector a is split into two sub vectors
@@ -52,22 +58,26 @@ void fft(std::vector<cd> & a, bool isInvert) {
             a1 = [a_1, a_3, ...]
 
         */
-        a0[i] = a[2*i];
-        a1[i] = a[2*i + 1];
+        a0[i] = a[2 * i];
+        a1[i] = a[2 * i + 1];
     }
     
     // Recursion
     fft(a0, isInvert);
     fft(a1, isInvert);
     
-    double ang = 2 * PI / n * (isInvert ? -1 : 1);
-    cd w(1), wn(cos(ang), sin(ang));
-    for (int i = 0; 2 * i < n; i++){
+    // Perform the operations themselves...
+    double angle = 2 * PI / n * (isInvert ? -1 : 1);
+    cd w(1), wn(cos(angle), sin(angle));
+    for (int i = 0; i < n / 2; i++){
         a[i] = a0[i] + w * a1[i];
+        a[i + n/2] = a0[i] - w * a1[i];
         if(isInvert) {
             a[i] /= 2;
             a[i + n/2] /= 2;
-        }
+        };
         w *= wn;
-    }
+    };
 }
+
+#endif

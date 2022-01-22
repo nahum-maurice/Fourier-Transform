@@ -8,7 +8,7 @@
 typedef int vectDimension;
 typedef double elemType;
 
-#define PI 3.1415926535897932;
+const double PI = acos(-1);
 
 class Vector {
     private :
