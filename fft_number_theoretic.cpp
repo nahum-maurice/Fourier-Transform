@@ -25,13 +25,13 @@ SOFTWARE.
 // Multiplying polynomials in time complexity : 0(nlogn) is possible using
 // the implementation for complex numbers. But we want to compute the 
 // coefficients modulo p, where p is a prime number and when it comes to 
-// large numbers, we might get into some rounding erros. The Fast Fourier
+// large numbers, we might get into some rounding errors. The Fast Fourier
 // Transform from a Number Theory perspective offers an efficient way to 
 // deal with integers and by definition gives us correct results.
 // 
 // This is possible because of the following fact :
-// The DFT algorithm is possible because :
-//     1- We know that y = x^n has n roots
+// The DFT requires :
+//     1- That y = x^n has n roots
 //     2- One root can generate the others by exponentiation (behaviour that
 //        shared by finite groups).
 // These facts hold for modular arithmetic.
@@ -45,7 +45,7 @@ SOFTWARE.
 
 // These constansts are choosen arbitrarily. They could have 
 // been whatever satisfying the relations :
-//     (root * inverse_root) = 1[mod]
+//     root * inverse_root = 1[mod]
 //     (primitive_root)^k = 1[mod]
 
 const int mod = 7340033; // a large enough module
