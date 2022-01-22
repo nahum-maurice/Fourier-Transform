@@ -78,7 +78,7 @@ void fft(std::vector<cd> & a, bool isInvert) {
             }
         }
     }
-    // Divide each element by element n for reverse FFT
+    // Divide each element by n for reverse FFT
     if (isInvert) for(cd & x : a) x /= n;
 }
 
