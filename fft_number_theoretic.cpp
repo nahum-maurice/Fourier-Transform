@@ -43,10 +43,15 @@ SOFTWARE.
 
 #include<vector>
 
-const int mod = 7340033; // the modulus
+// These constansts are choosen arbitrarily. They could have 
+// been whatever satisfying the relations :
+//     (root * inverse_root) = 1[mod]
+//     (primitive_root)^k = 1[mod]
+
+const int mod = 7340033; // a large enough module
 const int root = 5; //
-const int root_1 = 4404020; // 
-const int root_pw = 1 << 20;  // inverse of root[mod]
+const int inverse_root = 4404020; // inverse of root[mod]
+const int primitive_root = 1 << 20;  // primitive root = 2^20
 
 void fft(std::vector<int> & a, bool isInvert) {
     int n = a.size();
@@ -62,14 +67,14 @@ void fft(std::vector<int> & a, bool isInvert) {
     }
 
     for (int len = 2; len <= n; len <<= 1) {
-        int wlen = isInvert ? root_1 : root;
-        for (int i = len; i < root_pw; i << 1)
+        int wlen = isInvert ? inverse_root : root;
+        for (int i = len; i < primitive_root; i << 1)
             wlen = (int)(1LL * wlen * wlen % mod);
 
         for (int i = 0; i < n; i += len) {
             int w = 1;
             for(int j = 0; j < len / 2; j++){
-                int u = a[i+j], v = (int)(1LL * a[i+j+len / 2] * w % mod);
+                int u = a[i+j], v = (int)(1LL * a[i+j+len/2] * w % mod);
                 a[i+j] = u + v < mod ? u + v : u + v - mod;
                 a[i+j+len/2] = u - v >= 0 ? u - v : u - v + mod;
                 w = (int)(1LL * w * wlen % mod);
