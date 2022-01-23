@@ -48,10 +48,10 @@ SOFTWARE.
 //     root * inverse_root = 1[mod]
 //     (primitive_root)^k = 1[mod]
 
-const int mod = 7340033; // a large enough module
-const int root = 5; //
-const int inverse_root = 4404020; // inverse of root[mod]
-const int primitive_root = 1 << 20;  // primitive root = 2^2
+const int mod = 11; // a large enough module
+const int root = 6; //
+const int inverse_root = 35; // inverse of root[mod]
+const int primitive_root = 1 << 3;  // primitive root = 2^2
 
 using ll = long long;
 
