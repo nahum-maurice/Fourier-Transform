@@ -51,7 +51,7 @@ SOFTWARE.
 const int mod = 11; // a large enough module
 const int root = 6; //
 const int inverse_root = 35; // inverse of root[mod]
-const int primitive_root = 1 << 3;  // primitive root = 2^2
+const int primitive_root = 1 << 3;  // primitive root = 2^3
 
 using ll = long long;
 
