@@ -51,9 +51,30 @@ SOFTWARE.
 const int mod = 7340033; // a large enough module
 const int root = 5; //
 const int inverse_root = 4404020; // inverse of root[mod]
-const int primitive_root = 1 << 20;  // primitive root = 2^20
+const int primitive_root = 1 << 20;  // primitive root = 2^2
 
-void fft(std::vector<int> & a, bool isInvert) {
+using ll = long long;
+
+ll _extended_euclid(ll n, ll mod, ll & x, ll & y) {
+  if (mod == 0) {
+    x = 1; y = 0;
+    return n;
+  }
+  ll x1, y1;
+  ll d = _extended_euclid(mod, n % mod, x1, y1);
+  x = y1;
+  y = x1 - y1 * (n / mod);
+  return d;
+};
+
+ll _inverse(ll a, ll m) {
+  ll x, y;
+  ll g = _extended_euclid(a, m, x, y);
+  if (g != 1) return -1;
+  return (x % m + m) % m;
+}
+
+void fft_nt(std::vector<int> & a, bool isInvert) {
     int n = a.size();
 
     // Performs the same bit reversal as the  optimized fft algorithm.
@@ -63,17 +84,18 @@ void fft(std::vector<int> & a, bool isInvert) {
             j ^= bit;
         j ^= bit;
 
-        if (i < j) std::swap(a[i], a[j]);
+        if (i < j) 
+            std::swap(a[i], a[j]);
     }
 
     for (int len = 2; len <= n; len <<= 1) {
         int wlen = isInvert ? inverse_root : root;
-        for (int i = len; i < primitive_root; i << 1)
+        for (int i = len; i < primitive_root; i <<= 1)
             wlen = (int)(1LL * wlen * wlen % mod);
 
         for (int i = 0; i < n; i += len) {
             int w = 1;
-            for(int j = 0; j < len / 2; j++){
+            for(int j = 0; j < len / 2; j++) {
                 int u = a[i+j], v = (int)(1LL * a[i+j+len/2] * w % mod);
                 a[i+j] = u + v < mod ? u + v : u + v - mod;
                 a[i+j+len/2] = u - v >= 0 ? u - v : u - v + mod;
@@ -86,29 +108,7 @@ void fft(std::vector<int> & a, bool isInvert) {
         int n_1 = _inverse(n, mod);
         for (int & x : a)
             x = (int)(1LL * x * n_1 % mod);
-    }
-}
-
-int _inverse(int n, int mod){
-
-    // Finding the modular inverse using the extended 
-    // Euclidian algorithm
-    
-    int x, y;
-    int g = _extended_euclid(n, mod, x, y);
-    if(g != 1) return -1;
-}
-
-int _extended_euclid(int n, int mod, int & x, int & y){
-    if(mod == 0) {
-        x = 1; y=0;
-        return n;
     };
-    int x1, y1;
-    int d = _extended_euclid(mod, n % mod, x1, y1);
-    x = y1;
-    y = x1 = y1 * (n / mod);
-    return d;
-}
+};
 
 #endif

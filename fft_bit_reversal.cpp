@@ -27,9 +27,11 @@ SOFTWARE.
 
 #include<complex>
 #include<vector>
+// To have access to PI
+#include "fft_recursive.cpp"
 
 using cd = std::complex<double>;
-const double PI = acos(-1);
+// const double PI = acos(-1);
 
 // Implementing the Fast Fourier Transform (FFT) and
 // the inverse Fast Fourier Transform (inverse FFT)
@@ -50,7 +52,7 @@ int _reverse(int num, int log_n) {
     return result;
 }
 
-void fft(std::vector<cd> & a, bool isInvert) {
+void fft_br(std::vector<cd> & a, bool isInvert) {
     // In this implementation, we first iterated all bits of the index
     // and created a bitwise reversed index.
 
@@ -79,10 +81,13 @@ void fft(std::vector<cd> & a, bool isInvert) {
         }
     }
     // Divide each element by n for reverse FFT
-    if (isInvert) for(cd & x : a) x /= n;
+    if (isInvert) {
+        for(cd & x : a) 
+            x /= n;
+    }
 }
 
-void fft_optimized(std::vector<cd> & a, bool isInvert) {
+void fft_br_optimized(std::vector<cd> & a, bool isInvert) {
 
     // In this function, we perform the bit reversal in another way.
     // Since adding one in the binary system means to flip all tailing 
@@ -94,11 +99,12 @@ void fft_optimized(std::vector<cd> & a, bool isInvert) {
 
     for (int i = 1, j = 0; i < n; i++) {
         int bit = n >> 1;
-        for (; & bit; bit >>= 1)
+        for (; j & bit; bit >>= 1)
             j ^= bit;
         j ^= bit;
 
-        if (i < j) std::swap(a[i], a[j]);
+        if (i < j) 
+            std::swap(a[i], a[j]);
     }
 
     // Performs the same operations...    
